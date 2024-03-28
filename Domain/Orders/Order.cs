@@ -2,44 +2,47 @@
 using Domain.Products;
 namespace Domain.Orders;
 
+public record OrderId(Guid value);
 public class Order
 {
     private readonly HashSet<LineItem> _items = new();
-    public Guid Id { get; private set; }
-    public Guid CustomerId { get; private set; }
+    public OrderId orderId { get; private set; }
+    public CustomerId CustomerId { get; private set; }
 
-    public static Order Create(Customer customer)
+    public static Order Create(CustomerId customerId)
     {
         var order = new Order()
         {
-            Id = Guid.NewGuid(),
-            CustomerId = customer.Id,
+            orderId = new OrderId(Guid.NewGuid()),
+            CustomerId = customerId
         };
         return order;
     }
 
-    public void Add(Product product)
+    public void Add(ProductId productId, Money price)
     {
-        var lineItem = new LineItem(Guid.NewGuid(), Id, product.Id, product.Price);
+        var lineItem = new LineItem(new LineItemId(Guid.NewGuid()), orderId, productId, price);
         _items.Add(lineItem);
     }
 }
 
-public class LineItem
-{
-    public LineItem(Guid id, Guid orderId, Guid productId, Money price)
-    {
-        Id = id;
-        OrderId = orderId;
-        ProductId = productId;
-        Price = price;
-    }
 
-    public Guid Id { get; private set; }
-    public Guid OrderId { get; private set; }
-    public Guid ProductId { get; private set; }
-    public Money Price { get; private set; }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
