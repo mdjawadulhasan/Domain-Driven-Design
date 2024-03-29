@@ -6,14 +6,14 @@ public record OrderId(Guid value);
 public class Order
 {
     private readonly HashSet<LineItem> _items = new();
-    public OrderId orderId { get; private set; }
+    public OrderId OrderId { get; private set; }
     public CustomerId CustomerId { get; private set; }
 
     public static Order Create(CustomerId customerId)
     {
         var order = new Order()
         {
-            orderId = new OrderId(Guid.NewGuid()),
+            OrderId = new OrderId(Guid.NewGuid()),
             CustomerId = customerId
         };
         return order;
@@ -21,7 +21,7 @@ public class Order
 
     public void Add(ProductId productId, Money price)
     {
-        var lineItem = new LineItem(new LineItemId(Guid.NewGuid()), orderId, productId, price);
+        var lineItem = new LineItem(new LineItemId(Guid.NewGuid()), OrderId, productId, price);
         _items.Add(lineItem);
     }
 }
